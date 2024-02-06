@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+//import EventKit
+//import HealthKit
+import Firebase
 import FirebaseCore
 
 class AppDelegate: NSObject,UIApplicationDelegate{
