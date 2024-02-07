@@ -21,13 +21,19 @@ class AppDelegate: NSObject,UIApplicationDelegate{
 
 @main
 struct WellnessWaveApp: App {
-    
 //register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
+    @StateObject private var authViewModel = AuthViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            if authViewModel.isAuthenticated {
+                HomePageView()
+                    .environmentObject(authViewModel)
+            } else {
+                WelcomeView()
+                    .environmentObject(authViewModel)
+            }
         }
     }
 }

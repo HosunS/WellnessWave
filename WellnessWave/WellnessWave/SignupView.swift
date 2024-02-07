@@ -11,7 +11,10 @@ import FirebaseAuth
 struct SignupView: View {
     @State private var email: String = ""
     @State private var password: String = ""
-    
+//    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var authViewModel: AuthViewModel
+    @State private var navigateToHome: Bool = false
+
     var body: some View {
         ZStack {
             Color(.mint)
@@ -34,31 +37,34 @@ struct SignupView: View {
                         .padding(5)
                 }
                 .padding(15)
-                Button {
-                    signUp(email: email, password: password)
-                } label: {
+                Button(action: {
+                    signUp()
+                }) {
                     Text("Sign Up")
-                }
-                .padding(.bottom)
+                        .padding(15)
+                        .cornerRadius(10)
+                }.padding(.bottom)
             }
             .frame(width: 300.0, height: 600.0)
+        }.onReceive(authViewModel.$isAuthenticated) { isAuthenticated in
+            if isAuthenticated {
+                navigateToHome = true
+            }
+        }
+        .fullScreenCover(isPresented: $navigateToHome) {
+            // Navigate to the home screen or another authenticated view
+            HomePageView()
         }
     }
     
-    func signUp(email: String, password: String) {
-        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                print("Error occurred during sign up: \(error.localizedDescription)")
-            } else {
-                print("User signed up successfully")
-                // update view accordingly
-            }
-        }
+    //pass actual values into AuthViewModel to create user in db
+    func signUp() {
+        authViewModel.signUp(email: email, password: password)
     }
 }
 
 struct SignupView_Previews: PreviewProvider {
     static var previews: some View {
-        SignupView()
+        SignupView().environmentObject(AuthViewModel())
     }
 }

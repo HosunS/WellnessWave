@@ -11,10 +11,11 @@ import FirebaseAuth
 struct LogInView: View {
     @State private var email: String = ""
     @State private var password: String = ""
+    @EnvironmentObject private var authViewModel: AuthViewModel
+    @State private var navigateToHome: Bool = false
     @State private var showingAlert = false
     @State private var alertMessage = ""
     @State private var alertTitle = "Login Error"
-
     var body: some View {
         ZStack {
             Color.blue
@@ -42,7 +43,7 @@ struct LogInView: View {
                     .padding(15)
                 
                 Button(action: {
-                    logIn(email: email, password: password)
+                    logIn()
                 }) {
                     Text("Login")
                         .padding(15)
@@ -55,28 +56,26 @@ struct LogInView: View {
             .frame(width: 300, height: 600)
             .alert(isPresented: $showingAlert) {
                 Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            }.onReceive(authViewModel.$isAuthenticated) { isAuthenticated in
+                if isAuthenticated {
+                    navigateToHome = true
+                }
+            }
+            .fullScreenCover(isPresented: $navigateToHome) {
+                // Navigate to the home screen or another authenticated view
+                HomePageView()
             }
         }
     }
     
-    func logIn(email: String, password: String) {
-        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            if let error = error as NSError? {
-                self.showingAlert = true
-                self.alertMessage = error.localizedDescription
-                self.alertTitle = "Login Error"
-            } else {
-                self.showingAlert = true
-                self.alertMessage = "You're now logged in!"
-                self.alertTitle = "Success"
-                // Handle successful login, for example, by updating the view or transitioning to another part of your app
-            }
-        }
+    func logIn() {
+        
+        authViewModel.logIn(email: email, password: password)
     }
 }
 
 struct LogInView_Previews: PreviewProvider {
     static var previews: some View {
-        LogInView()
+        LogInView().environmentObject(AuthViewModel())
     }
 }

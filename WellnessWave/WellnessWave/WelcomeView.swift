@@ -9,11 +9,15 @@
 import SwiftUI
 import HealthKit
 
+import UIKit
+
+let iosVersion = UIDevice.current.systemVersion
+
 struct WelcomeView: View {
 
     
     var body: some View {
-        NavigationView(){
+        NavigationStack{
             VStack(alignment: .center, spacing: 20){
                 Text("WellnessWave")
                     .font(.largeTitle)
@@ -26,20 +30,20 @@ struct WelcomeView: View {
                 
                 NavigationLink(destination: LogInView()){
                     LoginButtonContent()
+                        .environmentObject(AuthViewModel())
                 }
                 
                 NavigationLink(destination:SignupView()){
                     SignupButtonContent()
+                        .environmentObject(AuthViewModel())
                 }
-                
-            }.navigationViewStyle(StackNavigationViewStyle())
-            
+            }
         }
     }
 }
     struct WelcomeView_Previews: PreviewProvider {
         static var previews: some View{
-            WelcomeView()
+            WelcomeView().environmentObject(AuthViewModel())
         }
     }
     
