@@ -35,6 +35,7 @@ struct SignupView: View {
                     SecureField("Password", text: $password)
                         .textFieldStyle(.roundedBorder)
                         .padding(5)
+            
                 }
                 .padding(15)
                 Button(action: {

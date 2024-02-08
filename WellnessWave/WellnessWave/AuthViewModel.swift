@@ -8,17 +8,17 @@
 import Foundation
 import SwiftUI
 import FirebaseAuth
+import FirebaseDatabase
 // handels the authentications
 
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated: Bool = false
-    @State private var showingAlert = false
-    @State private var alertMessage = ""
-    @State private var alertTitle = "Login Error"
+    private let databaseRef: DatabaseReference
     
     init() {
         // Check authentication state when the app starts
         self.isAuthenticated = Auth.auth().currentUser != nil
+        self.databaseRef = Database.database().reference()
     }
     
     
@@ -26,13 +26,9 @@ class AuthViewModel: ObservableObject {
     func logIn(email: String, password: String) {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             if let error = error as NSError? {
-                self.showingAlert = true
-                self.alertMessage = error.localizedDescription
-                self.alertTitle = "Login Error"
+                print("Error occurred during sign up: \(error.localizedDescription)")
             } else {
-                self.showingAlert = true
-                self.alertMessage = "You're now logged in!"
-                self.alertTitle = "Success"
+                print("User signed up successfully")
                 self.isAuthenticated = true
                 // Handle successful login, for example, by updating the view or transitioning to another part of your app
             }
@@ -44,13 +40,34 @@ class AuthViewModel: ObservableObject {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
                 print("Error occurred during sign up: \(error.localizedDescription)")
-            } else {
+            } else if let authResult = authResult{
                 print("User signed up successfully")
                 self.isAuthenticated = true
+                // add whatever data we want to initialize the user's database with, will have users enter this information in userinputview
+                let userData: [String:Any] = [
+                    "email" : email,
+                    "name" : "",
+                    "height" : 0,
+                    "weight" : 0,
+                    "weeklyWorkoutGoal":0,
+                    "dailyCalorieBurnedGoal":0,
+                    
+                ]
+                self.saveUserData(uid: authResult.user.uid, userData: userData)
+                
             }
         }
     }
     
+    private func saveUserData(uid: String, userData: [String: Any]) {
+        databaseRef.child("users").child(uid).setValue(userData) { error, _ in
+            if let error = error {
+                print("Error saving user data: \(error.localizedDescription)")
+            } else {
+                print("User data saved successfully")
+            }
+        }
+    }
     
     func signOut() {
         do {

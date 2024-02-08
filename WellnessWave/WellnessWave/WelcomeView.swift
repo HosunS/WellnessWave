@@ -7,11 +7,7 @@
 
 //import frameworks for ui as well as accessing health and fitness data
 import SwiftUI
-import HealthKit
-
 import UIKit
-
-let iosVersion = UIDevice.current.systemVersion
 
 struct WelcomeView: View {
 

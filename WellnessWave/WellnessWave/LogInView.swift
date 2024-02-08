@@ -13,9 +13,7 @@ struct LogInView: View {
     @State private var password: String = ""
     @EnvironmentObject private var authViewModel: AuthViewModel
     @State private var navigateToHome: Bool = false
-    @State private var showingAlert = false
-    @State private var alertMessage = ""
-    @State private var alertTitle = "Login Error"
+ 
     var body: some View {
         ZStack {
             Color.blue
@@ -54,9 +52,7 @@ struct LogInView: View {
                 Spacer()
             }
             .frame(width: 300, height: 600)
-            .alert(isPresented: $showingAlert) {
-                Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-            }.onReceive(authViewModel.$isAuthenticated) { isAuthenticated in
+            .onReceive(authViewModel.$isAuthenticated) { isAuthenticated in
                 if isAuthenticated {
                     navigateToHome = true
                 }

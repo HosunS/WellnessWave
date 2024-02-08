@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		546694A52B743532006C4514 /* UserInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694A42B743532006C4514 /* UserInputView.swift */; };
+		546694A72B7435B2006C4514 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694A62B7435B2006C4514 /* DashboardView.swift */; };
+		546694A92B74963A006C4514 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694A82B74963A006C4514 /* SleepView.swift */; };
+		546694AB2B749650006C4514 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694AA2B749650006C4514 /* ExerciseView.swift */; };
+		546694AD2B749B1C006C4514 /* HydrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694AC2B749B1C006C4514 /* HydrationView.swift */; };
 		54EF1F2E2B687F710040B951 /* WellnessWaveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF1F2D2B687F710040B951 /* WellnessWaveApp.swift */; };
 		54EF1F302B687F710040B951 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF1F2F2B687F710040B951 /* ContentView.swift */; };
 		54EF1F322B687F740040B951 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54EF1F312B687F740040B951 /* Assets.xcassets */; };
@@ -49,6 +54,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		546694A42B743532006C4514 /* UserInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInputView.swift; sourceTree = "<group>"; };
+		546694A62B7435B2006C4514 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		546694A82B74963A006C4514 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
+		546694AA2B749650006C4514 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
+		546694AC2B749B1C006C4514 /* HydrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationView.swift; sourceTree = "<group>"; };
 		54EF1F2A2B687F710040B951 /* WellnessWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WellnessWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54EF1F2D2B687F710040B951 /* WellnessWaveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessWaveApp.swift; sourceTree = "<group>"; };
 		54EF1F2F2B687F710040B951 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -124,10 +134,15 @@
 			children = (
 				54EF1F412B6889240040B951 /* WellnessWave.entitlements */,
 				54EF1F2D2B687F710040B951 /* WellnessWaveApp.swift */,
+				546694AC2B749B1C006C4514 /* HydrationView.swift */,
 				54F64AAB2B71F39E008A00E0 /* FirebaseDatabase.swift */,
 				54EF1F2F2B687F710040B951 /* ContentView.swift */,
 				54EF1F3B2B687FF90040B951 /* WelcomeView.swift */,
 				54F64AAF2B734AB3008A00E0 /* HomepageView.swift */,
+				546694A62B7435B2006C4514 /* DashboardView.swift */,
+				546694A82B74963A006C4514 /* SleepView.swift */,
+				546694AA2B749650006C4514 /* ExerciseView.swift */,
+				546694A42B743532006C4514 /* UserInputView.swift */,
 				54F64AB12B734BC5008A00E0 /* AuthViewModel.swift */,
 				54EF1F422B688D280040B951 /* HealthStore.swift */,
 				54EF1F3F2B6883560040B951 /* SignupView.swift */,
@@ -252,12 +267,17 @@
 			files = (
 				54EF1F302B687F710040B951 /* ContentView.swift in Sources */,
 				54EF1F432B688D280040B951 /* HealthStore.swift in Sources */,
+				546694A92B74963A006C4514 /* SleepView.swift in Sources */,
 				54EF1F3C2B687FF90040B951 /* WelcomeView.swift in Sources */,
 				54EF1F3E2B6882290040B951 /* LogInView.swift in Sources */,
 				54EF1F2E2B687F710040B951 /* WellnessWaveApp.swift in Sources */,
 				54F64AAC2B71F39E008A00E0 /* FirebaseDatabase.swift in Sources */,
+				546694A72B7435B2006C4514 /* DashboardView.swift in Sources */,
+				546694A52B743532006C4514 /* UserInputView.swift in Sources */,
+				546694AD2B749B1C006C4514 /* HydrationView.swift in Sources */,
 				54F64AB02B734AB3008A00E0 /* HomepageView.swift in Sources */,
 				54EF1F402B6883560040B951 /* SignupView.swift in Sources */,
+				546694AB2B749650006C4514 /* ExerciseView.swift in Sources */,
 				54F64AB22B734BC5008A00E0 /* AuthViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
