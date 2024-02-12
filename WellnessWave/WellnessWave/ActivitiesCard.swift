@@ -1,4 +1,3 @@
-
 //
 //  ActivitiesCard.swift
 //  WellnessWave
@@ -8,7 +7,16 @@
 
 import SwiftUI
 
+struct History{
+    let id: Int
+    let date: String
+    let hours: Int
+    let minutes: Int
+    let burnedCalories: Int
+}
+
 struct ActivitiesCard: View {
+    @State var history: History
     var body: some View {
         ZStack{
             
@@ -18,12 +26,18 @@ struct ActivitiesCard: View {
             VStack{
                 
                 VStack{
-                    Text("Month - Date")
-                        .foregroundColor(.white)
+                    HStack{
+                        Image(systemName: "calendar")
+                            .foregroundColor(.indigo)
+                        Text(history.date)
+                            .foregroundColor(.black)
+                    }
         
                 }
                 
                 Divider()
+                    .background(Color.white)
+                    .padding(4)
 //                HStack{
 //                    Text("Start Time")
 //                        .font(.system(size: 16))
@@ -35,7 +49,7 @@ struct ActivitiesCard: View {
 //                    Text("Hours:Minutes")
 //                        .font(.system(size: 16))
 //                        .foregroundColor(.black)
-//                    
+//
 //                }
                 
                 HStack{
@@ -44,13 +58,13 @@ struct ActivitiesCard: View {
                         .foregroundColor(.black)
                     Image(systemName: "fitness.timer")
                         .font(.system(size: 16))
-                        .foregroundColor(.blue)
+                        .foregroundColor(.yellow)
                     Spacer()
-                    Text("Hours:Minutes")
+                    Text("\(history.hours)h\(history.minutes)m")
                         .foregroundColor(.black)
                         .font(.system(size: 16))
                     
-                }
+                }.padding([.bottom], 5)
                 
                 HStack{
                     Text("Burned Calories")
@@ -60,7 +74,7 @@ struct ActivitiesCard: View {
                         .font(.system(size: 16))
                         .foregroundColor(.red)
                     Spacer()
-                    Text("2000 calories")
+                    Text("\(history.burnedCalories) calories")
                         .foregroundColor(.black)
                         .font(.system(size: 16))
                     
@@ -73,6 +87,6 @@ struct ActivitiesCard: View {
 
 struct ActivitiesCard_Previews: PreviewProvider {
     static var previews: some View {
-        ActivitiesCard()
+        ActivitiesCard(history: History(id: 0, date: "02-20", hours: 1, minutes: 30, burnedCalories: 3000))
     }
 }
