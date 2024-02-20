@@ -42,9 +42,9 @@ class HealthStore {
         }
     }
     
-    func queryCaloriesBurned(completion: @escaping (Double?, Error?) -> Void) {
+    func queryCaloriesBurned(completion: @escaping (Double) -> Void) {
         guard let calorieType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else {
-            completion(nil, NSError(domain: "HealthKit", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to create calorie type"]))
+            completion(0)
             return
         }
         
@@ -56,9 +56,7 @@ class HealthStore {
             DispatchQueue.main.async {
                 if let sum = result?.sumQuantity() {
                     let calories = sum.doubleValue(for: HKUnit.kilocalorie())
-                    completion(calories, nil)
-                } else {
-                    completion(nil, error)
+                    completion(calories)
                 }
             }
         }

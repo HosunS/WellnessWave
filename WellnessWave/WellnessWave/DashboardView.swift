@@ -5,56 +5,50 @@
 //  Created by Ho sun Song on 2/6/24.
 //
 import SwiftUI
+import HealthKit
+import HealthKitUI
 
 struct DashboardView: View {
     @State private var isShowingUserInputView = false
-    @State private var caloriesBurned: Double = 0
-    @State private var stepsTaken: Double = 0
-    
-    private var healthStore: HealthStore = HealthStore()
+    @ObservedObject private var viewModel = DashboardViewModel()
+    var summary = HKActivitySummary()
     
     var body: some View {
-        
         TabView {
             NavigationView {
-                VStack{
-                    Text("Calories Burned Today: \(caloriesBurned, specifier: "%.2f")")
-                    Text("Steps for today: \(stepsTaken, specifier:"%.0f")")
-                }
-                    .onAppear {
-                        healthStore.requestAuthorization { authorized in
-                                if authorized {
-                                    healthStore.queryCaloriesBurned { calories, error in
-                                        if let calories = calories {
-                                            self.caloriesBurned = calories
-                                        } else {
-                                            print("Error querying calories burned")
-                                        }
-                                    }
-                                    
-                                    healthStore.queryStepsForToday{steps in
-                                        self.stepsTaken = steps
-                                    }
-                                    
-                                } else {
-                                    print("HealthKit authorization was denied.")
-                                }
-                            }
+                VStack {
+                    ZStack {
+                        
+                        ActivityRingView(progress: viewModel.caloriesBurned, goal: viewModel.caloriesBurnedGoal, color: .red)
+                            .frame(width: 150, height: 150)
+                            .padding()
+                        ActivityRingView(progress: viewModel.stepsTaken, goal: 10000, color: .blue) // Example step goal
+                            .frame(width: 130, height: 130)
                     }
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: {
-                                isShowingUserInputView = true
-                            }) {
-                                Image(systemName: "gearshape.fill")
-                            }
+                    Text("Calories Burned Today: \(viewModel.caloriesBurned, specifier: "%.2f") / \(viewModel.caloriesBurnedGoal, specifier: "%.2f")")
+                        .foregroundColor(.red)
+                    Text("Steps for today: \(viewModel.stepsTaken, specifier:"%.0f")")
+                }
+                .onAppear {
+                    viewModel.onAppear()
+                }
+                .navigationTitle("Hello \(viewModel.username)!")
+                .font(.system(size: 20))
+                .foregroundColor(.blue)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            isShowingUserInputView = true
+                        }) {
+                            Image(systemName: "gearshape.fill")
                         }
                     }
+                }
             }
             .tabItem {
                 Label("Dashboard", systemImage: "house")
             }
-
+            
             NavigationView {
                 SleepView()
                     .navigationTitle("Sleep")
@@ -62,7 +56,7 @@ struct DashboardView: View {
             .tabItem {
                 Label("Sleep", systemImage: "moon.zzz")
             }
-
+            
             NavigationView {
                 ExerciseView()
                     .navigationTitle("Exercise")
