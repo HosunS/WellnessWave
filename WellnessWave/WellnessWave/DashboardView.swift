@@ -8,12 +8,39 @@ import SwiftUI
 
 struct DashboardView: View {
     @State private var isShowingUserInputView = false
-
+    @State private var caloriesBurned: Double = 0
+    @State private var stepsTaken: Double = 0
+    
+    private var healthStore: HealthStore = HealthStore()
+    
     var body: some View {
+        
         TabView {
             NavigationView {
-                Text("Dashboard")
-                    .navigationTitle("Dashboard")
+                VStack{
+                    Text("Calories Burned Today: \(caloriesBurned, specifier: "%.2f")")
+                    Text("Steps for today: \(stepsTaken, specifier:"%.0f")")
+                }
+                    .onAppear {
+                        healthStore.requestAuthorization { authorized in
+                                if authorized {
+                                    healthStore.queryCaloriesBurned { calories, error in
+                                        if let calories = calories {
+                                            self.caloriesBurned = calories
+                                        } else {
+                                            print("Error querying calories burned")
+                                        }
+                                    }
+                                    
+                                    healthStore.queryStepsForToday{steps in
+                                        self.stepsTaken = steps
+                                    }
+                                    
+                                } else {
+                                    print("HealthKit authorization was denied.")
+                                }
+                            }
+                    }
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: {
