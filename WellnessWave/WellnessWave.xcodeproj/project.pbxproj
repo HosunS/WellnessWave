@@ -15,6 +15,7 @@
 		546694AD2B749B1C006C4514 /* HydrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694AC2B749B1C006C4514 /* HydrationView.swift */; };
 		54B487512B855FFC00454C8F /* DashboadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B487502B855FFC00454C8F /* DashboadViewModel.swift */; };
 		54B487532B8566F700454C8F /* ActivityRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B487522B8566F700454C8F /* ActivityRingView.swift */; };
+		54B487552B85B6C900454C8F /* EventKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B487542B85B6C900454C8F /* EventKitManager.swift */; };
 		54EF1F2E2B687F710040B951 /* WellnessWaveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF1F2D2B687F710040B951 /* WellnessWaveApp.swift */; };
 		54EF1F302B687F710040B951 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF1F2F2B687F710040B951 /* ContentView.swift */; };
 		54EF1F322B687F740040B951 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 54EF1F312B687F740040B951 /* Assets.xcassets */; };
@@ -65,6 +66,8 @@
 		546694AC2B749B1C006C4514 /* HydrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationView.swift; sourceTree = "<group>"; };
 		54B487502B855FFC00454C8F /* DashboadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboadViewModel.swift; sourceTree = "<group>"; };
 		54B487522B8566F700454C8F /* ActivityRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRingView.swift; sourceTree = "<group>"; };
+		54B487542B85B6C900454C8F /* EventKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKitManager.swift; sourceTree = "<group>"; };
+		54B487562B85BF5B00454C8F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		54EF1F2A2B687F710040B951 /* WellnessWave.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WellnessWave.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		54EF1F2D2B687F710040B951 /* WellnessWaveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WellnessWaveApp.swift; sourceTree = "<group>"; };
 		54EF1F2F2B687F710040B951 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -138,6 +141,7 @@
 		54EF1F2C2B687F710040B951 /* WellnessWave */ = {
 			isa = PBXGroup;
 			children = (
+				54B487562B85BF5B00454C8F /* Info.plist */,
 				54EF1F412B6889240040B951 /* WellnessWave.entitlements */,
 				54EF1F2D2B687F710040B951 /* WellnessWaveApp.swift */,
 				546694AC2B749B1C006C4514 /* HydrationView.swift */,
@@ -154,6 +158,7 @@
 				546694A42B743532006C4514 /* UserInputView.swift */,
 				54F64AB12B734BC5008A00E0 /* AuthViewModel.swift */,
 				54EF1F422B688D280040B951 /* HealthStore.swift */,
+				54B487542B85B6C900454C8F /* EventKitManager.swift */,
 				54EF1F3F2B6883560040B951 /* SignupView.swift */,
 				54EF1F3D2B6882290040B951 /* LogInView.swift */,
 				54EF1F442B68AE1E0040B951 /* GoogleService-Info.plist */,
@@ -275,6 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				54EF1F302B687F710040B951 /* ContentView.swift in Sources */,
+				54B487552B85B6C900454C8F /* EventKitManager.swift in Sources */,
 				54EF1F432B688D280040B951 /* HealthStore.swift in Sources */,
 				54B487532B8566F700454C8F /* ActivityRingView.swift in Sources */,
 				546694A92B74963A006C4514 /* SleepView.swift in Sources */,
@@ -429,6 +435,7 @@
 				DEVELOPMENT_TEAM = GSX5C46AFK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WellnessWave/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Used to update user on calories burned.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -462,6 +469,7 @@
 				DEVELOPMENT_TEAM = GSX5C46AFK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = WellnessWave/Info.plist;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Used to update user on calories burned.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
