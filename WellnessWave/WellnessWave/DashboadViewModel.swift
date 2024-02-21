@@ -103,6 +103,9 @@ class DashboardViewModel: ObservableObject {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMddHHmm" // used to store event name in the format of Year / Month / Day / Hour / Minutes
         
+        let dayOfWeekFormatter = DateFormatter()
+        dayOfWeekFormatter.dateFormat = "EEEE" // Format to get the day of the week
+        
         userEventsRef.removeValue { error, _ in
             if let error = error {
                 print("Error removing existing events: \(error.localizedDescription)")
@@ -119,13 +122,16 @@ class DashboardViewModel: ObservableObject {
             let duration = Int(event.endDate.timeIntervalSince(event.startDate) / 60)
             
             let eventKey = dateFormatter.string(from: event.startDate)
+    
+            let dayOfWeek = dayOfWeekFormatter.string(from: event.startDate)
             
             let eventDict: [String: Any] = [
                 "title": event.title ?? "No Title",
                 "startDate": event.startDate.description,
                 "endDate": event.endDate.description,
                 "duration": duration,
-                "isAllDay": event.isAllDay
+                "isAllDay": event.isAllDay, // will always be false for now, but we can also have it not skip the event if its allday
+                "dayOfWeek": dayOfWeek
                 //can pull and store more data depending on what we need here
             ]
             
