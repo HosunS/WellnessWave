@@ -58,6 +58,12 @@ struct SleepView: View {
             
             Text("Selected time: \(shortTime(wakeTime))")
                 .padding()
+            
+            Button(action: {
+                scheduleAlarm()
+            }) {
+                Text("Schedule Notification")
+            }
         }
     }
     
@@ -66,6 +72,30 @@ struct SleepView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
+    
+    func scheduleAlarm() {
+            let alarm = UNMutableNotificationContent()
+            alarm.title = "Time to Sleep!"
+            alarm.body = "Your selected bedtime is approaching."
+
+            // Get the components (hour and minute) from the selected bedtime
+            let components = Calendar.current.dateComponents([.hour, .minute], from: bedTime)
+
+            // Create a trigger based on the selected bedtime
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+            // Create a notification request
+            let request = UNNotificationRequest(identifier: "bedtimeNotification", content: alarm, trigger: trigger)
+
+            // Schedule the notification
+            UNUserNotificationCenter.current().add(request) { (error) in
+                if let error = error {
+                    print("Error scheduling notification: \(error.localizedDescription)")
+                } else {
+                    print("Notification scheduled successfully")
+                }
+            }
+        }
 }
 
 
