@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import HealthKit
+import HealthKitUI
 
 struct HydrationView: View {
     @State var waterLevel: CGFloat = 0
-    var recommended: Int = 128
+    @ObservedObject private var viewModel = HydrationViewModel()
     var body: some View {
+        let recommended: Int = Int(viewModel.weight * 0.5)
+        
         VStack {
             Text("Recommended amount of water to drink:")
                 .font(.title3)
@@ -20,6 +24,7 @@ struct HydrationView: View {
                 .fontWeight(.semibold)
                 .padding(.bottom, 60.0)
             
+            //Creating Water Meter
             HStack {
                 Spacer()
                 ZStack(alignment: .bottomLeading) {
@@ -39,6 +44,8 @@ struct HydrationView: View {
 
                 }
                 Spacer()
+                
+                //Oz Buttons and updating waterLevel accordingly
                 VStack(spacing: 30) {
                     Button {
                         waterLevel = min(waterLevel + (8.0 * 100.0/CGFloat(recommended)), 100)
@@ -74,6 +81,9 @@ struct HydrationView: View {
                 .font(.title3)
                 .fontWeight(.medium)
                 .padding([.top, .leading, .trailing], 20.0)
+        }
+        .onAppear {
+            viewModel.onAppear()
         }
     }
 }

@@ -55,6 +55,7 @@
 		54F64AAC2B71F39E008A00E0 /* FirebaseDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F64AAB2B71F39E008A00E0 /* FirebaseDatabase.swift */; };
 		54F64AB02B734AB3008A00E0 /* HomepageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F64AAF2B734AB3008A00E0 /* HomepageView.swift */; };
 		54F64AB22B734BC5008A00E0 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F64AB12B734BC5008A00E0 /* AuthViewModel.swift */; };
+		A9A4B8092B882C3900B6514D /* HydrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A4B8082B882C3900B6514D /* HydrationViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +83,7 @@
 		54F64AAB2B71F39E008A00E0 /* FirebaseDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDatabase.swift; sourceTree = "<group>"; };
 		54F64AAF2B734AB3008A00E0 /* HomepageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomepageView.swift; sourceTree = "<group>"; };
 		54F64AB12B734BC5008A00E0 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		A9A4B8082B882C3900B6514D /* HydrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 				54EF1F412B6889240040B951 /* WellnessWave.entitlements */,
 				54EF1F2D2B687F710040B951 /* WellnessWaveApp.swift */,
 				546694AC2B749B1C006C4514 /* HydrationView.swift */,
+				A9A4B8082B882C3900B6514D /* HydrationViewModel.swift */,
 				54F64AAB2B71F39E008A00E0 /* FirebaseDatabase.swift */,
 				54EF1F2F2B687F710040B951 /* ContentView.swift */,
 				541032D62B78774000990E4A /* ActivitiesCard.swift */,
@@ -286,6 +289,7 @@
 				546694A92B74963A006C4514 /* SleepView.swift in Sources */,
 				54EF1F3C2B687FF90040B951 /* WelcomeView.swift in Sources */,
 				54B487512B855FFC00454C8F /* DashboadViewModel.swift in Sources */,
+				A9A4B8092B882C3900B6514D /* HydrationViewModel.swift in Sources */,
 				541032D72B78774000990E4A /* ActivitiesCard.swift in Sources */,
 				54EF1F3E2B6882290040B951 /* LogInView.swift in Sources */,
 				54EF1F2E2B687F710040B951 /* WellnessWaveApp.swift in Sources */,
