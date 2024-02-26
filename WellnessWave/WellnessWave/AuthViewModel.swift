@@ -51,6 +51,8 @@ class AuthViewModel: ObservableObject {
                     "weight" : 0,
                     "weeklyWorkoutGoal":0,
                     "dailyCalorieBurnedGoal":0,
+                    "lastLoggedIn":0,
+                    "waterLevel":0
                     
                 ]
                 self.saveUserData(uid: authResult.user.uid, userData: userData)

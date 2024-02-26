@@ -10,7 +10,6 @@ import HealthKit
 import HealthKitUI
 
 struct HydrationView: View {
-    @State var waterLevel: CGFloat = 0
     @ObservedObject private var viewModel = HydrationViewModel()
     var body: some View {
         let recommended: Int = Int(viewModel.weight * 0.5)
@@ -30,9 +29,9 @@ struct HydrationView: View {
                 ZStack(alignment: .bottomLeading) {
                     
                     RoundedRectangle(cornerRadius: 15)
-                        .frame(width:200.0, height: waterLevel*4)
+                        .frame(width:200.0, height: viewModel.waterLevel*4)
                         .foregroundColor(Color(red: 0.4627, green: 0.8392, blue: 1.0))
-                        .animation(Animation.smooth(), value:waterLevel)
+                        .animation(Animation.smooth(), value:viewModel.waterLevel)
                     
                     RoundedRectangle(cornerRadius: 15)
                         .frame(width: 200.0, height: 400.0)
@@ -45,10 +44,11 @@ struct HydrationView: View {
                 }
                 Spacer()
                 
-                //Oz Buttons and updating waterLevel accordingly
+                //Oz Buttons and updating viewModel.waterLevel accordingly
                 VStack(spacing: 30) {
                     Button {
-                        waterLevel = min(waterLevel + (8.0 * 100.0/CGFloat(recommended)), 100)
+                        viewModel.waterLevel = min(viewModel.waterLevel + (8.0 * 100.0/CGFloat(recommended)), 100)
+                        viewModel.saveWater(waterLevel: viewModel.waterLevel)
                     } label: {
                         Text("8 oz ")
                             .padding()
@@ -57,7 +57,8 @@ struct HydrationView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 40))
                     }
                     Button {
-                            waterLevel = min(waterLevel + (16.0 * 100.0/CGFloat(recommended)), 100)
+                        viewModel.waterLevel = min(viewModel.waterLevel + (16.0 * 100.0/CGFloat(recommended)), 100)
+                        viewModel.saveWater(waterLevel: viewModel.waterLevel)
                     } label: {
                         Text("16 oz")
                             .padding()
@@ -66,7 +67,8 @@ struct HydrationView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 40))
                     }
                     Button {
-                        waterLevel = min(waterLevel + (32.0 * 100.0/CGFloat(recommended)), 100)
+                        viewModel.waterLevel = min(viewModel.waterLevel + (32.0 * 100.0/CGFloat(recommended)), 100)
+                        viewModel.saveWater(waterLevel: viewModel.waterLevel)
                     } label: {
                         Text("32 oz")
                             .padding()
@@ -77,7 +79,7 @@ struct HydrationView: View {
                 }
                 Spacer()
             }
-            Text("\(Int((waterLevel * CGFloat(recommended) * 0.01))) oz consumed")
+            Text("\(Int((viewModel.waterLevel * CGFloat(recommended) * 0.01))) oz consumed")
                 .font(.title3)
                 .fontWeight(.medium)
                 .padding([.top, .leading, .trailing], 20.0)

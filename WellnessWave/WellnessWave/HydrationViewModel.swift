@@ -14,6 +14,8 @@ class HydrationViewModel: ObservableObject {
     
     @Published var username: String = ""
     @Published var weight: Double = 0
+    @Published var lastLoggedIn: Date = Date()
+    @Published var waterLevel: CGFloat = 0
     
     private var healthStore = HealthStore()
     private var databaseRef = Database.database().reference()
@@ -42,6 +44,41 @@ class HydrationViewModel: ObservableObject {
                 }
             }
         })
+        
+        //reset waterLevel if new day, otherwise fetch waterLevel
+        userRef.child("lastLoggedIn").observeSingleEvent(of: .value, with: { snapshot in
+            DispatchQueue.main.async {
+                if let lastLoggedIn = snapshot.value as? Int {
+                    let calendar = Calendar.current
+                    let currentDay = calendar.component(.weekday, from:self.lastLoggedIn)
+                    //compare current day versus day of lastLoggedIn
+                    if currentDay != lastLoggedIn {
+                        userRef.child("waterLevel").setValue(0)
+                        userRef.child("lastLoggedIn").setValue(currentDay)
+                    }
+                    //fetch waterLevel
+                    else {
+                        userRef.child("waterLevel").observeSingleEvent(of: .value, with: { snapshot in
+                            DispatchQueue.main.async {
+                                if let waterLevel = snapshot.value as? Double {
+                                    self.waterLevel = waterLevel
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+        })
+    }
+    //save waterLevel when button is clicked in HydrationView
+    func saveWater(waterLevel: CGFloat) {
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No current user found")
+            return
+        }
+        let userRef = databaseRef.child("users").child(currentUser.uid)
+        
+        userRef.child("waterLevel").setValue(waterLevel)
     }
     
 
