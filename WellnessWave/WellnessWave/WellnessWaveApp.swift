@@ -42,7 +42,9 @@ struct WellnessWaveApp: App {
 //register app delegate for Firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var authViewModel = AuthViewModel()
-
+    init() {
+        configureNavigationBarAppearance()
+    }
     var body: some Scene {
         WindowGroup {
             if authViewModel.isAuthenticated {
@@ -53,5 +55,18 @@ struct WellnessWaveApp: App {
                     .environmentObject(authViewModel)
             }
         }
+    }
+    
+    func configureNavigationBarAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .black // Your preferred background color
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white] // Sets the title color to white
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white] // Also set large title color if you use it
+        
+        // Apply the appearance settings to all navigation bars
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
 }

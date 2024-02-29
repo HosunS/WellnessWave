@@ -16,9 +16,11 @@ struct DashboardView: View {
     var body: some View {
         TabView {
             NavigationView {
+                ZStack{
+                    Color.black.edgesIgnoringSafeArea(.top)
+
                 VStack {
                     ZStack {
-                        
                         ActivityRingView(progress: viewModel.caloriesBurned, goal: viewModel.caloriesBurnedGoal, color: .red)
                             .frame(width: 150, height: 150)
                             .padding()
@@ -32,6 +34,8 @@ struct DashboardView: View {
                 .onAppear {
                     viewModel.onAppear()
                 }
+                }
+                
                 .navigationTitle("Hello \(viewModel.username)!")
                 .font(.system(size: 20))
                 .foregroundColor(.blue)
