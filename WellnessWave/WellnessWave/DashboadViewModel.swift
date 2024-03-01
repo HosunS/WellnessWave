@@ -23,7 +23,7 @@ class DashboardViewModel: ObservableObject {
     private var healthStore = HealthStore()
     private var databaseRef = Database.database().reference()
     
-    func onAppear() {
+    func fetchUserDataAndGoals() {
         guard let currentUser = Auth.auth().currentUser else {
             print("No current user found")
             return

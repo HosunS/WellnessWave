@@ -15,13 +15,15 @@ struct HomePageView: View {
     @State private var hasUserData: Bool = false
     @State private var loggedout: Bool = false
     @EnvironmentObject private var authViewModel: AuthViewModel
-    
+    @State private var dashboardViewModel = DashboardViewModel()
+
+
     var body: some View {
             VStack {
                 if hasUserData {
                     DashboardView()
                 } else {
-                    UserInputView(isPresented: .constant(false))
+                    UserInputView(isPresented: .constant(false), viewModel: dashboardViewModel)
                 }
                 
                 Spacer()

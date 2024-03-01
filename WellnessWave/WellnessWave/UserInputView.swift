@@ -10,7 +10,8 @@ import FirebaseAuth
 
 struct UserInputView: View {
     @Binding var isPresented: Bool
-    
+    @ObservedObject var viewModel: DashboardViewModel
+
     @State private var name: String = ""
     @State private var height: Double = 0
     @State private var weight: Double = 0
@@ -92,6 +93,7 @@ struct UserInputView: View {
             } else {
                 print("User data saved successfully")
                 // Dismiss the UserInputView after saving data
+                self.viewModel.fetchUserDataAndGoals()
                 isPresented = false
             }
         }
@@ -116,6 +118,6 @@ struct UserInputView: View {
 
 struct UserInputView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInputView(isPresented: .constant(true))
+        UserInputView(isPresented: .constant(true), viewModel:DashboardViewModel() )
     }
 }

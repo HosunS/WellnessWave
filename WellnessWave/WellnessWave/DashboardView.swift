@@ -32,7 +32,7 @@ struct DashboardView: View {
                     Text("Steps for today: \(viewModel.stepsTaken, specifier:"%.0f")")
                 }
                 .onAppear {
-                    viewModel.onAppear()
+                    viewModel.fetchUserDataAndGoals()
                 }
                 }
                 
@@ -78,7 +78,7 @@ struct DashboardView: View {
             }
         }
         .sheet(isPresented: $isShowingUserInputView) {
-            UserInputView(isPresented: $isShowingUserInputView)
+            UserInputView(isPresented: $isShowingUserInputView, viewModel: viewModel)
         }
     }
 }
