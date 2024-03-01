@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import FirebaseDatabase
 
 struct ExerciseView: View {
     @State var selectedDate: Date = Date()
     @State var hours: Int = 0
     @State var minutes: Int = 0
+    private var databaseRef = Database.database().reference()
+
     var body: some View {
         ZStack {
             Color(uiColor: .black)
@@ -39,6 +43,7 @@ struct ExerciseView: View {
                         .cornerRadius(20)
                         
                         
+                        
                     Text("Workout Duration")
 
                         .font(.system(size: 20))
@@ -64,7 +69,7 @@ struct ExerciseView: View {
                     }.padding(.horizontal)
 
                         
-                        Button(role: .none) {} label: {
+                    Button(action: {saveWorkoutDateTime()}){
                             HStack {
                                 Spacer()
                                 Text("Share workout")
@@ -121,7 +126,23 @@ struct ExerciseView: View {
         }
         
     }
+    
+    func saveWorkoutDateTime() {
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No current user found")
+            return
+        }
+        let userRef = databaseRef.child("users").child(currentUser.uid)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        
+        userRef.child("selectedDate").setValue(dateFormatter.string(from:selectedDate))
+        userRef.child("selectedDuration").setValue(hours*60 + minutes)
+    }
 }
+
+
 
 struct ExerciseView_Previews: PreviewProvider {
     static var previews: some View {
