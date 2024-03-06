@@ -13,6 +13,8 @@
 		546694A92B74963A006C4514 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694A82B74963A006C4514 /* SleepView.swift */; };
 		546694AB2B749650006C4514 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694AA2B749650006C4514 /* ExerciseView.swift */; };
 		546694AD2B749B1C006C4514 /* HydrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694AC2B749B1C006C4514 /* HydrationView.swift */; };
+		5481D77D2B953AA9004B066A /* RecommendationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5481D77C2B953AA9004B066A /* RecommendationEngine.swift */; };
+		5481D77F2B95415C004B066A /* eventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5481D77E2B95415C004B066A /* eventModel.swift */; };
 		54B487512B855FFC00454C8F /* DashboadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B487502B855FFC00454C8F /* DashboadViewModel.swift */; };
 		54B487532B8566F700454C8F /* ActivityRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B487522B8566F700454C8F /* ActivityRingView.swift */; };
 		54B487552B85B6C900454C8F /* EventKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B487542B85B6C900454C8F /* EventKitManager.swift */; };
@@ -65,6 +67,8 @@
 		546694A82B74963A006C4514 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		546694AA2B749650006C4514 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		546694AC2B749B1C006C4514 /* HydrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationView.swift; sourceTree = "<group>"; };
+		5481D77C2B953AA9004B066A /* RecommendationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationEngine.swift; sourceTree = "<group>"; };
+		5481D77E2B95415C004B066A /* eventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eventModel.swift; sourceTree = "<group>"; };
 		54B487502B855FFC00454C8F /* DashboadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboadViewModel.swift; sourceTree = "<group>"; };
 		54B487522B8566F700454C8F /* ActivityRingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityRingView.swift; sourceTree = "<group>"; };
 		54B487542B85B6C900454C8F /* EventKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventKitManager.swift; sourceTree = "<group>"; };
@@ -149,6 +153,8 @@
 				546694AC2B749B1C006C4514 /* HydrationView.swift */,
 				A9A4B8082B882C3900B6514D /* HydrationViewModel.swift */,
 				54F64AAB2B71F39E008A00E0 /* FirebaseDatabase.swift */,
+				5481D77C2B953AA9004B066A /* RecommendationEngine.swift */,
+				5481D77E2B95415C004B066A /* eventModel.swift */,
 				54EF1F2F2B687F710040B951 /* ContentView.swift */,
 				541032D62B78774000990E4A /* ActivitiesCard.swift */,
 				54EF1F3B2B687FF90040B951 /* WelcomeView.swift */,
@@ -282,8 +288,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5481D77D2B953AA9004B066A /* RecommendationEngine.swift in Sources */,
 				54EF1F302B687F710040B951 /* ContentView.swift in Sources */,
 				54B487552B85B6C900454C8F /* EventKitManager.swift in Sources */,
+				5481D77F2B95415C004B066A /* eventModel.swift in Sources */,
 				54EF1F432B688D280040B951 /* HealthStore.swift in Sources */,
 				54B487532B8566F700454C8F /* ActivityRingView.swift in Sources */,
 				546694A92B74963A006C4514 /* SleepView.swift in Sources */,

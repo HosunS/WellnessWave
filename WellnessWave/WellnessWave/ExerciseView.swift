@@ -14,7 +14,8 @@ struct ExerciseView: View {
     @State var hours: Int = 0
     @State var minutes: Int = 0
     private var databaseRef = Database.database().reference()
-
+    @State var recEngine = RecommendationEngine()
+    @State private var recommendedTime: String = "Hours:Minutes"
     var body: some View {
         ZStack {
             Color(uiColor: .black)
@@ -94,7 +95,7 @@ struct ExerciseView: View {
                             Image(systemName: "cursorarrow.click.badge.clock")
                                 .font(.system(size: 20))
                                 .foregroundColor(.red)
-                            Text("Hours:Minutes")
+                            Text(recommendedTime)
                                 .font(.system(size: 20))
                                 .foregroundColor(.red)
                                 .fontWeight(.bold)
@@ -139,7 +140,12 @@ struct ExerciseView: View {
         
         userRef.child("selectedDate").setValue(dateFormatter.string(from:selectedDate))
         userRef.child("selectedDuration").setValue(hours*60 + minutes)
+        
+        recEngine.recommendWorkout { time in
+            self.recommendedTime = time // Step 2
+        }
     }
+    
 }
 
 

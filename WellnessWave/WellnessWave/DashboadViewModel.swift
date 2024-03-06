@@ -102,6 +102,7 @@ class DashboardViewModel: ObservableObject {
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMddHHmm" // used to store event name in the format of Year / Month / Day / Hour / Minutes
+//        dateFormatter.dateFormat = "yyyyMMdd" // have it match the day in our selected date
         
         let dayOfWeekFormatter = DateFormatter()
         dayOfWeekFormatter.dateFormat = "EEEE" // Format to get the day of the week
