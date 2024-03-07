@@ -11,6 +11,7 @@ import FirebaseAuth
 import UIKit
 import SwiftUI
 import CoreLocation
+import EventKit
 
 class RecommendationEngine {
     private var databaseRef = Database.database().reference()
@@ -74,9 +75,15 @@ class RecommendationEngine {
         }
     }
     
-    func recommendWorkout(completion: @escaping (String) -> Void) {
+    func recommendWorkout(selectedDate: Date, hours: Int, minutes: Int, completion: @escaping (String) -> Void) {
         print("recommendWorkout called")
-
+        
+        
+        (for: selectedDate) { freeTimeSlots in
+                    let recommendedTime = self.calculateBestWorkoutTime(freeTimeSlots: freeTimeSlots, hours: hours, minutes: minutes)
+                    completion(recommendedTime)
+                }
+        
         fetchSelectedDate { [weak self] selectedDate in
             guard let self = self, let date = selectedDate else {
                 print("No selected date found.")
@@ -96,5 +103,48 @@ class RecommendationEngine {
             }
         }
     }
+    
+    private func fetchFreeTimeSlots(for date: Date, completion: @escaping ([DateInterval]) -> Void) {
+            let eventStore = EKEventStore()
+            eventStore.requestFullAccessToEvents { granted, error in
+                guard granted && error == nil else {
+                    print("Access denied or error occurred: \(String(describing: error))")
+                    completion([])
+                    return
+                }
+
+                let calendars = eventStore.calendars(for: .event)
+                let startDate = Calendar.current.startOfDay(for: date)
+                let endDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate)!
+                let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
+                let events = eventStore.events(matching: predicate).sorted { $0.startDate < $1.startDate }
+
+                var freeTimeSlots: [DateInterval] = []
+                var lastEventEnd = startDate
+
+                for event in events {
+                    if event.startDate > lastEventEnd {
+                        freeTimeSlots.append(DateInterval(start: lastEventEnd, end: event.startDate))
+                    }
+                    lastEventEnd = max(lastEventEnd, event.endDate)
+                }
+
+                if lastEventEnd < endDate {
+                    freeTimeSlots.append(DateInterval(start: lastEventEnd, end: endDate))
+                }
+
+                completion(freeTimeSlots)
+            }
+        }
+
+        private func calculateBestWorkoutTime(freeTimeSlots: [DateInterval], hours: Int, minutes: Int) -> String {
+            // Implement the logic to determine the best workout time
+            // This is a placeholder implementation
+            if let suitableSlot = freeTimeSlots.first(where: { $0.duration >= Double(hours * 60 + minutes) * 60 }) {
+                return "Best Time: \(suitableSlot.start)"
+            } else {
+                return "No suitable time found."
+            }
+        }
 }
 
