@@ -78,8 +78,7 @@ class RecommendationEngine {
     func recommendWorkout(selectedDate: Date, hours: Int, minutes: Int, completion: @escaping (String) -> Void) {
         print("recommendWorkout called")
         
-        
-        (for: selectedDate) { freeTimeSlots in
+        fetchFreeTimeSlots(for: selectedDate) { freeTimeSlots in
                     let recommendedTime = self.calculateBestWorkoutTime(freeTimeSlots: freeTimeSlots, hours: hours, minutes: minutes)
                     completion(recommendedTime)
                 }
