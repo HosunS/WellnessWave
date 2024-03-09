@@ -16,8 +16,15 @@ struct HydrationView: View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.top)
             VStack {
+                HStack {
+                    Text("Score: \(Int(viewModel.hydrationScore()))/100")
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                    Spacer()
+                }
+                .padding(20)
                 Text("Recommended amount of water to drink:")
-                    .font(.title3)
+                    .font(.title2)
                     .fontWeight(.medium)
                     .foregroundStyle(.white)
                 Text("\(recommended) oz")
@@ -25,6 +32,7 @@ struct HydrationView: View {
                     .fontWeight(.semibold)
                     .padding(.bottom, 60.0)
                     .foregroundStyle(.white)
+
                 
                 //Creating Water Meter
                 HStack {

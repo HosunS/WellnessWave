@@ -53,6 +53,7 @@ class AuthViewModel: ObservableObject {
                     "dailyCalorieBurnedGoal":0,
                     "lastLoggedIn":0,
                     "waterLevel":0,
+                    "pastHydrationQuality": [1, 1, 1, 1, 1, 1, 1],
 //                    "bedTime": "", // will eventually remove and just use last value from past bedTimes
 //                    "wakeTime": "",
                     "pastBedTimes": [],
