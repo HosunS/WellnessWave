@@ -7,37 +7,42 @@
 
 import Foundation
 
-struct Event {
-    var title: String
-    var startDate: Date
-    var endDate: Date
-    var duration: Int
-    var isAllDay: Bool
-    var dayOfWeek: String
+struct Event: CustomStringConvertible {
+    let startDate: Date
+    let endDate: Date
+    let duration: Int
+    let title: String // Include the title of the event
     
     init?(dictionary: [String: Any]) {
-        guard let title = dictionary["title"] as? String,
-              let startDateStr = dictionary["startDate"] as? String,
-              let endDateStr = dictionary["endDate"] as? String,
-              let duration = dictionary["duration"] as? Int,
-              let isAllDay = dictionary["isAllDay"] as? Bool,
-              let dayOfWeek = dictionary["dayOfWeek"] as? String,
-              let startDate = Event.dateFormatter.date(from: startDateStr),
-              let endDate = Event.dateFormatter.date(from: endDateStr) else {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Use a fixed locale for parsing
+        
+        if let startDateStr = dictionary["startDate"] as? String, // Ensure keys match your format
+           let endDateStr = dictionary["endDate"] as? String,
+           let startDate = dateFormatter.date(from: startDateStr),
+           let endDate = dateFormatter.date(from: endDateStr),
+           let duration = dictionary["duration"] as? Int,
+           let title = dictionary["title"] as? String { // Parse the title
+            
+            self.startDate = startDate
+            self.endDate = endDate
+            self.duration = duration
+            self.title = title // Assign the title
+        } else {
             return nil
         }
-        
-        self.title = title
-        self.startDate = startDate
-        self.endDate = endDate
-        self.duration = duration
-        self.isAllDay = isAllDay
-        self.dayOfWeek = dayOfWeek
     }
     
-    static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        return formatter
-    }()
+    var description: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        
+        let formattedStartDate = dateFormatter.string(from: startDate)
+        let formattedEndDate = dateFormatter.string(from: endDate)
+        
+        // Include the title in the event's description
+        return "Title: \(title), starts at: \(formattedStartDate), ends at: \(formattedEndDate), duration: \(duration) minutes"
+    }
 }

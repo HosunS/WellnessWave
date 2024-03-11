@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct History{
+struct History: Identifiable{
     let id: Int
     let date: String
     let hours: Int
     let minutes: Int
     let burnedCalories: Int
+    var completed: Bool = false
 }
 
 struct ActivitiesCard: View {

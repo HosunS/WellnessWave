@@ -17,8 +17,11 @@ class RecommendationEngine {
     private var databaseRef = Database.database().reference()
     @Published var selectedDate: String = ""
     @Published var selectedDuration: Int = 0
+    var eventsForSelectedDate: [Event] = []
+    @State var recommendDate: String = ""
     
-    func fetchSelectedDate(completion: @escaping (Date?) -> Void) {
+    func fetchSelectedDate() {
+        
         guard let currentUser = Auth.auth().currentUser else{
             print("No current user")
             return
@@ -28,122 +31,143 @@ class RecommendationEngine {
         
         //fetch the selected date
         userRef.child("selectedDate").observeSingleEvent(of: .value, with: { snapshot in
-        DispatchQueue.main.async {
-            if let selectedDate = snapshot.value as? String {
-                self.selectedDate = selectedDate
+            DispatchQueue.main.async {
+                if let selectedDate = snapshot.value as? String {
+                    self.selectedDate = selectedDate
+                    print(selectedDate)
+                }
             }
-        }
-    })
+        })
         //fetch the selected duration
         userRef.child("selectedDuration").observeSingleEvent(of: .value, with: { snapshot in
-        DispatchQueue.main.async {
-            if let selectedDuration = snapshot.value as? Int {
-                self.selectedDuration = selectedDuration
+            DispatchQueue.main.async {
+                if let selectedDuration = snapshot.value as? Int {
+                    self.selectedDuration = selectedDuration
+                    print(selectedDuration)
+                }
             }
-        }
-    })
+        })
         
     }
     
-    func fetchEvents(forDate date: String, completion: @escaping ([Event]) -> Void) {
+    func fetchEvents(completion: @escaping () -> Void) {
         guard let currentUser = Auth.auth().currentUser else {
             print("No current user found")
+            completion()
             return
         }
         
-        let dateKeyPrefix = date
+        let eventsRef = databaseRef.child("users").child(currentUser.uid).child("events").child(self.selectedDate)
         
-        let eventsRef = databaseRef.child("users").child(currentUser.uid).child("events")
-        eventsRef.observeSingleEvent(of: .value) { snapshot in
-            var events = [Event]()
+        eventsRef.observeSingleEvent(of: .value, with: { snapshot in
+            var fetchedEvents: [Event] = []
             
-            for child in snapshot.children.allObjects as? [DataSnapshot] ?? [] {
-                let eventKey = child.key
-                // check if the eventKey starts with the selectedDate
-                if eventKey.hasPrefix(dateKeyPrefix) {
-                    if let eventDict = child.value as? [String: Any] {
-                        // use the dictionary to initialize an event object
-                        if let event = Event(dictionary: eventDict) {
-                            events.append(event)
-                        }
-                    }
+            for child in snapshot.children {
+                guard let childSnapshot = child as? DataSnapshot,
+                      let eventDict = childSnapshot.value as? [String: Any] else { continue }
+                
+                if let event = Event(dictionary: eventDict) {
+                    fetchedEvents.append(event)
                 }
             }
+            
             DispatchQueue.main.async {
-                completion(events)
+                self.eventsForSelectedDate = fetchedEvents
+                print("Events for selected date updated.")
+                completion()
             }
-        }
+        }, withCancel: { error in
+            print(error.localizedDescription)
+            DispatchQueue.main.async {
+                completion()
+            }
+        })
     }
     
-    func recommendWorkout(selectedDate: Date, hours: Int, minutes: Int, completion: @escaping (String) -> Void) {
-        print("recommendWorkout called")
+    func calculateFreeTimeSlots(from events: [Event], on day: Date) -> [DateInterval] {
+        var freeTimeSlots: [DateInterval] = []
         
-        fetchFreeTimeSlots(for: selectedDate) { freeTimeSlots in
-                    let recommendedTime = self.calculateBestWorkoutTime(freeTimeSlots: freeTimeSlots, hours: hours, minutes: minutes)
-                    completion(recommendedTime)
-                }
+        let calendar = Calendar.current
+//        let startOfDay = calendar.startOfDay(for: day)
+        let workdayStartTime = calendar.date(bySettingHour: 9, minute: 0, second: 0, of: day)!
+        let workdayEndTime = calendar.date(bySettingHour: 22, minute: 0, second: 0, of: day)!
         
-        fetchSelectedDate { [weak self] selectedDate in
-            guard let self = self, let date = selectedDate else {
-                print("No selected date found.")
-                completion("No date selected")
+        var lastEventEnd: Date = workdayStartTime
+        
+        for event in events.sorted(by: { $0.startDate < $1.startDate }) {
+            if event.endDate <= workdayStartTime || event.startDate >= workdayEndTime { continue }
+            
+            let eventStart = max(event.startDate, workdayStartTime)
+            let eventEnd = min(event.endDate, workdayEndTime)
+            
+            if eventStart > lastEventEnd {
+                freeTimeSlots.append(DateInterval(start: lastEventEnd, end: eventStart))
+            }
+            lastEventEnd = eventEnd
+        }
+        
+        if lastEventEnd < workdayEndTime {
+            freeTimeSlots.append(DateInterval(start: lastEventEnd, end: workdayEndTime))
+        }
+        
+        return freeTimeSlots
+    }
+    
+    // returning the earliest available time for now
+    func calculateBestWorkoutTimeUsingFreeSlots(freeTimeSlots: [DateInterval], durationMinutes: Int) -> String {
+        let workoutDurationInSeconds = Double(durationMinutes) * 60
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm a"
+        
+        for slot in freeTimeSlots.sorted(by: { $0.start < $1.start }) {
+            if slot.duration >= workoutDurationInSeconds {
+                return "Best Time: \(dateFormatter.string(from: slot.start))"
+            }
+        }
+        
+        return "No suitable time found within preferred hours."
+    }
+    
+    
+    
+    func recommendWorkout(completion: @escaping (String) -> Void) {
+        fetchSelectedDate()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self = self else { return }
+            
+            // ensure selectedDate is not empty
+            guard !self.selectedDate.isEmpty else {
+                completion("Selected date is not set.")
                 return
             }
             
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyyMMdd"
-            let selectedDateString = dateFormatter.string(from: date)
-            
-            self.fetchEvents(forDate: selectedDateString) { events in
-                print("found some asdf")
-                // apply logic here
-                let recommendedTime = "07:00" // placeholder, replace with actual calculation
+            // fetch events for this date.
+            self.fetchEvents {
+                // after fetching events from realtimedb, they are stored in self.eventsForSelectedDate.
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyyMMdd"
+                guard let date = dateFormatter.date(from: self.selectedDate) else {
+                    completion("Error parsing selected date.")
+                    return
+                }
+                
+                print("Events for selected date (\(self.selectedDate)):")
+                self.eventsForSelectedDate.forEach {event in
+                    print(event) // just a check to see if the events are properly stored
+                }
+                
+                // calculate free time slots from these events.
+                let freeTimeSlots = self.calculateFreeTimeSlots(from: self.eventsForSelectedDate, on: date)
+                
+                // use the free time slots to recommend a workout time.
+                let recommendedTime = self.calculateBestWorkoutTimeUsingFreeSlots(freeTimeSlots: freeTimeSlots, durationMinutes: self.selectedDuration)
                 completion(recommendedTime)
             }
         }
     }
     
-    private func fetchFreeTimeSlots(for date: Date, completion: @escaping ([DateInterval]) -> Void) {
-            let eventStore = EKEventStore()
-            eventStore.requestFullAccessToEvents { granted, error in
-                guard granted && error == nil else {
-                    print("Access denied or error occurred: \(String(describing: error))")
-                    completion([])
-                    return
-                }
-
-                let calendars = eventStore.calendars(for: .event)
-                let startDate = Calendar.current.startOfDay(for: date)
-                let endDate = Calendar.current.date(byAdding: .day, value: 1, to: startDate)!
-                let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: calendars)
-                let events = eventStore.events(matching: predicate).sorted { $0.startDate < $1.startDate }
-
-                var freeTimeSlots: [DateInterval] = []
-                var lastEventEnd = startDate
-
-                for event in events {
-                    if event.startDate > lastEventEnd {
-                        freeTimeSlots.append(DateInterval(start: lastEventEnd, end: event.startDate))
-                    }
-                    lastEventEnd = max(lastEventEnd, event.endDate)
-                }
-
-                if lastEventEnd < endDate {
-                    freeTimeSlots.append(DateInterval(start: lastEventEnd, end: endDate))
-                }
-
-                completion(freeTimeSlots)
-            }
-        }
-
-        private func calculateBestWorkoutTime(freeTimeSlots: [DateInterval], hours: Int, minutes: Int) -> String {
-            // Implement the logic to determine the best workout time
-            // This is a placeholder implementation
-            if let suitableSlot = freeTimeSlots.first(where: { $0.duration >= Double(hours * 60 + minutes) * 60 }) {
-                return "Best Time: \(suitableSlot.start)"
-            } else {
-                return "No suitable time found."
-            }
-        }
+    
+    
+    
 }
 

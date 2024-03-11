@@ -21,10 +21,10 @@ struct DashboardView: View {
 
                 VStack {
                     ZStack {
-                        ActivityRingView(progress: viewModel.caloriesBurned, goal: viewModel.caloriesBurnedGoal, color: .red)
+                        ActivityRingView(progress: viewModel.actualweeklyCaloriesBurned, goal: viewModel.weeklyCaloriesBurnedGoal, color: .red)
                             .frame(width: 150, height: 150)
                             .padding()
-                        ActivityRingView(progress: viewModel.stepsTaken, goal: 10000, color: .blue) // Example step goal
+                        ActivityRingView(progress: viewModel.stepsTaken, goal: 100, color: .blue) // Example step goal
                             .frame(width: 130, height: 130)
                     }
                     Text("Calories Burned Today: \(viewModel.caloriesBurned, specifier: "%.2f") / \(viewModel.caloriesBurnedGoal, specifier: "%.2f")")
@@ -33,6 +33,7 @@ struct DashboardView: View {
                 }
                 .onAppear {
                     viewModel.fetchUserDataAndGoals()
+                    viewModel.fetchAndCalculateTotalCalories()
                 }
                 }
                 
