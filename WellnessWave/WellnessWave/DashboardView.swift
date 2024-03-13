@@ -11,6 +11,8 @@ import HealthKitUI
 struct DashboardView: View {
     @State private var isShowingUserInputView = false
     @ObservedObject private var viewModel = DashboardViewModel()
+    @ObservedObject private var viewModelHydration = HydrationViewModel()
+
     var summary = HKActivitySummary()
     
     var body: some View {
@@ -20,20 +22,38 @@ struct DashboardView: View {
                     Color.black.edgesIgnoringSafeArea(.top)
 
                 VStack {
+                    Text("\(viewModel.userlacking)")
+                        .bold()
+                        .foregroundColor(.white)
                     ZStack {
                         ActivityRingView(progress: viewModel.actualweeklyCaloriesBurned, goal: viewModel.weeklyCaloriesBurnedGoal, color: .red)
-                            .frame(width: 150, height: 150)
+                            .frame(width: 160, height: 180)
                             .padding()
-                        ActivityRingView(progress: viewModel.stepsTaken, goal: 100, color: .blue) // Example step goal
-                            .frame(width: 130, height: 130)
+                        ActivityRingView(progress: viewModel.hydrationSum, goal: viewModel.recommended, color: .blue) // Example step goal
+                            .frame(width: 140, height: 150)
+                        Text("Total Score")
+                            .bold()
+                            .foregroundColor(.white)
+                            .scenePadding(.bottom)
+                            .scenePadding(.bottom)
+                            .scenePadding(.bottom)
+                        Text("\(viewModel.lifeStyleScore, specifier: "%.f") / 100")
+                            .bold()
+                            .foregroundColor(.white)
+                            .scenePadding(.top)
+
+                        
                     }
-                    Text("Calories Burned Today: \(viewModel.caloriesBurned, specifier: "%.2f") / \(viewModel.caloriesBurnedGoal, specifier: "%.2f")")
+                    Text("Calories Burned Weekly: \(viewModel.actualweeklyCaloriesBurned, specifier: "%.2f") / \(viewModel.weeklyCaloriesBurnedGoal, specifier: "%.2f")")
                         .foregroundColor(.red)
-                    Text("Steps for today: \(viewModel.stepsTaken, specifier:"%.0f")")
+                    Text("Hydration Weekly Meter: \(viewModel.hydrationSum, specifier: "%.2f") / \(viewModel.recommended, specifier: "%.f")")
                 }
                 .onAppear {
                     viewModel.fetchUserDataAndGoals()
                     viewModel.fetchAndCalculateTotalCalories()
+                    viewModel.fetchLifeStyleScore()
+                    viewModel.updateLifeStyleScore()
+                    viewModel.userRecommend()
                 }
                 }
                 

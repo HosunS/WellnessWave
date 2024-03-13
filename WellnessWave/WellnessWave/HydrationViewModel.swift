@@ -20,7 +20,7 @@ class HydrationViewModel: ObservableObject {
     
     private var healthStore = HealthStore()
     private var databaseRef = Database.database().reference()
-    
+
     func onAppear() {
         guard let currentUser = Auth.auth().currentUser else {
             print("No current user found")

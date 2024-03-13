@@ -10,6 +10,8 @@ import FirebaseAuth
 import FirebaseDatabase
 import SwiftUI
 import EventKit
+import HealthKit
+import HealthKitUI
 
 class DashboardViewModel: ObservableObject {
     @Published var caloriesBurned: Double = 0
@@ -17,14 +19,123 @@ class DashboardViewModel: ObservableObject {
     @Published var username: String = ""
     @Published var caloriesBurnedGoal: Double = 0
     @Published var workoutGoal: Double = 0
+    
     //trying to keep track of weekly calories burned..
     @Published var actualweeklyCaloriesBurned: Double = 0
     @Published var weeklyCaloriesBurnedGoal: Double = 0
+    
+    //scores for hydration, exercise, and sleep
+    @Published var hydrationScore: Double = 0
+    @Published var exerciseScore: Double = 0
+    @Published var sleepScore: Double = 0
+    @Published var lifeStyleScore: Double = 0
+    
+    //bool to track lowest score to provide improvement recommendations
+    @Published var hydrationLowest: Bool = false
+    @Published var exerciseLowest: Bool = false
+    @Published var lifeStyleSCore: Bool = false
+    
+    @Published var userWeight: Double = 0.0
+    @Published var recommended: Double = 0
+    @Published var hydrationSum: Double = 0
+    @Published var sleepSum: Double = 0
+    
+    @Published var userlacking: String = ""
+    
+    @ObservedObject private var viewModel = HydrationViewModel()
+    
     private var healthStore = HealthStore()
     private var databaseRef = Database.database().reference()
     
+    func userRecommend(){
+        let smallest = min(self.hydrationScore, self.exerciseScore, self.sleepScore)
+        if smallest == hydrationScore{
+            self.userlacking = "Make sure you drink more water!"
+        }
+        else if smallest == exerciseScore{
+            self.userlacking = "Get more workouts recommended and complete them to increase your lifestyle score!"
+        }
+        else if smallest == sleepScore{
+            self.userlacking = "We recommend not using any electronics for one hour before bed to make sure you can get good sleep!"
+        }
+    }
     
-    // don't have to use this.
+    //Fetch scores
+    func fetchLifeStyleScore() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No current user found")
+            return
+        }
+        
+        let userRef = databaseRef.child("users").child(currentUserID)
+        // fetching pastSleepQuality data.
+        userRef.child("pastSleepQuality").observeSingleEvent(of: .value, with: { snapshot in
+            DispatchQueue.main.async {
+                if let pastSleepQuality = snapshot.value as? [Int] {
+                    // ensure the array isn't empty to avoid division by zero.
+                    guard !pastSleepQuality.isEmpty else {
+                        self.sleepScore = 0
+                        return
+                    }
+                    
+                    // calculate the sum of the array's elements and then compute the average.
+                    let sum = pastSleepQuality.reduce(0, +)
+                    self.sleepSum = Double(sum)
+                    let average = Double(sum) / Double(pastSleepQuality.count)
+                    self.sleepScore = average
+                    
+                } else {
+                    // handle the case where pastSleepQuality doesn't exist or isn't an array of doubles.
+                    print("Failed to fetch or parse pastSleepQuality")
+                    self.sleepScore = 0
+                }
+            }
+        }) { error in
+            print(error.localizedDescription)
+            self.sleepScore = 0
+        }
+        // fetching pastHydrayionQuality data // same as fetching pastSleepQuality
+        userRef.child("pastHydrationQuality").observeSingleEvent(of: .value, with: { snapshot in
+            DispatchQueue.main.async {
+                if let pastHydrationQuality = snapshot.value as? [Double] {
+                    guard !pastHydrationQuality.isEmpty else {
+                        self.hydrationScore = 0
+                        return
+                    }
+                    let sum = pastHydrationQuality.reduce(0, +)
+                    self.hydrationSum = sum
+                    let average = Double(sum) / Double(pastHydrationQuality.count)
+                    self.hydrationScore = average
+                    
+                } else {
+                    print("Failed to fetch or parse pastHydrationQuality")
+                    self.hydrationScore = 0
+                }
+            }
+        }) { error in
+            print(error.localizedDescription)
+            self.hydrationScore = 0
+        }
+        
+        // convert exercise score into a value within 100
+        self.exerciseScore = self.actualweeklyCaloriesBurned/self.weeklyCaloriesBurnedGoal
+        if self.exerciseScore < 1{
+            self.exerciseScore *= 100
+        }
+        else{
+            self.exerciseScore = 100
+        }
+        print(exerciseScore)
+        print(hydrationScore)
+        print(sleepScore)
+        
+        self.updateLifeStyleScore()
+    }
+
+    func updateLifeStyleScore() {
+        self.lifeStyleScore = (hydrationScore + exerciseScore + sleepScore) / 3
+    }
+    
     func fetchAndCalculateTotalCalories() {
             guard let currentUserID = Auth.auth().currentUser?.uid else {
                 print("No current user found")
@@ -51,9 +162,17 @@ class DashboardViewModel: ObservableObject {
             print("No current user found")
             return
         }
-        //fetch username
         let userRef = databaseRef.child("users").child(currentUser.uid)
-        
+
+        //fetch user weight
+            userRef.child("weight").observeSingleEvent(of: .value, with: { snapshot in
+            DispatchQueue.main.async {
+                if let weight = snapshot.value as? Double {
+                    self.userWeight = weight
+                }
+            }
+        })
+        //fetch username
             userRef.child("name").observeSingleEvent(of: .value, with: { snapshot in
             DispatchQueue.main.async {
                 if let username = snapshot.value as? String {
@@ -93,6 +212,7 @@ class DashboardViewModel: ObservableObject {
                 }
             }
         }
+        self.recommended = self.userWeight * 0.5 * 7
         requestEventAccess()
     }
     

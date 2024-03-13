@@ -163,6 +163,7 @@ struct ExerciseView: View {
         
     }
     
+    //used to display burned calories on activity card
     func calculateBurnedCalories(durationMinutes: Int) -> Int {
         // Average calories burned per minute for moderate activity
         let caloriesPerMinute: Double = 8.5
@@ -175,15 +176,15 @@ struct ExerciseView: View {
     
     func addOrUpdateHistoryItem(newItem: History) {
         if let index = workoutHistory.firstIndex(where: { $0.date == newItem.date }) {
-            // An item with the same date exists, update it
+            // same date update
             workoutHistory[index] = newItem
         } else {
-            // No item with the same date exists, add the new item
+            // nothing with the same date update
             workoutHistory.append(newItem)
         }
     }
     
-    // Function to mark an activity as completed
+    // function to mark an activity as completed
     func completeActivity(activity:History) {
         if let index = workoutHistory.firstIndex(where: { $0.id == activity.id }) {
             var activity = workoutHistory[index]
@@ -201,11 +202,10 @@ struct ExerciseView: View {
         guard let currentUser = Auth.auth().currentUser else { return }
         let userRef = databaseRef.child("users").child(currentUser.uid).child("completedWorkouts")
 
-        // Fetch existing completed workouts
         userRef.observeSingleEvent(of: .value, with: { snapshot in
             var completedWorkouts: [[String: Any]] = []
             
-            // Extract existing workouts
+            // extract existing workouts
             for child in snapshot.children {
                 if let snapshot = child as? DataSnapshot,
                    let value = snapshot.value as? [String: Any] {
@@ -213,17 +213,17 @@ struct ExerciseView: View {
                 }
             }
             
-            // Add the new completed workout
+            // add the new completed workout
             let newCompletedActivity = ["date": activity.date,
                                         "hours": activity.hours,
                                         "minutes": activity.minutes,
                                         "burnedCalories": activity.burnedCalories]
             completedWorkouts.append(newCompletedActivity)
             
-            // Ensure only the last 7 activities are kept
+            // only the last 7 activities are kept
             let latestWorkouts = Array(completedWorkouts.suffix(7))
             
-            // Update Firebase with the latest workouts
+            // update realtimedb with the latest workouts
             userRef.setValue(latestWorkouts)
         })
     }
