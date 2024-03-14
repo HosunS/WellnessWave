@@ -13,6 +13,7 @@
 		546694A92B74963A006C4514 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694A82B74963A006C4514 /* SleepView.swift */; };
 		546694AB2B749650006C4514 /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694AA2B749650006C4514 /* ExerciseView.swift */; };
 		546694AD2B749B1C006C4514 /* HydrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546694AC2B749B1C006C4514 /* HydrationView.swift */; };
+		547A734E2BA3AD55009BB7DA /* TransitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547A734D2BA3AD55009BB7DA /* TransitionView.swift */; };
 		5481D77D2B953AA9004B066A /* RecommendationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5481D77C2B953AA9004B066A /* RecommendationEngine.swift */; };
 		5481D77F2B95415C004B066A /* eventModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5481D77E2B95415C004B066A /* eventModel.swift */; };
 		54B487512B855FFC00454C8F /* DashboadViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54B487502B855FFC00454C8F /* DashboadViewModel.swift */; };
@@ -67,6 +68,7 @@
 		546694A82B74963A006C4514 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		546694AA2B749650006C4514 /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
 		546694AC2B749B1C006C4514 /* HydrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationView.swift; sourceTree = "<group>"; };
+		547A734D2BA3AD55009BB7DA /* TransitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionView.swift; sourceTree = "<group>"; };
 		5481D77C2B953AA9004B066A /* RecommendationEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendationEngine.swift; sourceTree = "<group>"; };
 		5481D77E2B95415C004B066A /* eventModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eventModel.swift; sourceTree = "<group>"; };
 		54B487502B855FFC00454C8F /* DashboadViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboadViewModel.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				546694A62B7435B2006C4514 /* DashboardView.swift */,
 				54B487522B8566F700454C8F /* ActivityRingView.swift */,
 				54B487502B855FFC00454C8F /* DashboadViewModel.swift */,
+				547A734D2BA3AD55009BB7DA /* TransitionView.swift */,
 				546694A82B74963A006C4514 /* SleepView.swift */,
 				546694AA2B749650006C4514 /* ExerciseView.swift */,
 				546694A42B743532006C4514 /* UserInputView.swift */,
@@ -291,6 +294,7 @@
 				5481D77D2B953AA9004B066A /* RecommendationEngine.swift in Sources */,
 				54EF1F302B687F710040B951 /* ContentView.swift in Sources */,
 				54B487552B85B6C900454C8F /* EventKitManager.swift in Sources */,
+				547A734E2BA3AD55009BB7DA /* TransitionView.swift in Sources */,
 				5481D77F2B95415C004B066A /* eventModel.swift in Sources */,
 				54EF1F432B688D280040B951 /* HealthStore.swift in Sources */,
 				54B487532B8566F700454C8F /* ActivityRingView.swift in Sources */,

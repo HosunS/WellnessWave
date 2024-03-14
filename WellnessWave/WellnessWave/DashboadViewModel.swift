@@ -41,6 +41,7 @@ class DashboardViewModel: ObservableObject {
     @Published var sleepSum: Double = 0
     
     @Published var userlacking: String = ""
+    static var hasShownDashboard = false
     
     @ObservedObject private var viewModel = HydrationViewModel()
     
