@@ -98,6 +98,7 @@ struct SleepView: View {
                 Button(action: {
                     bedTimePicker.toggle()
                     scheduleAlarm()
+                    recWake()
                     saveSleepTimes(type: "bed", closed: bedTimePicker)
                     
                 }) {
@@ -295,7 +296,13 @@ struct SleepView: View {
         return mean
     }
     
-    
+    func recWake() {
+        let calendar = Calendar.current
+
+        if let tmp = calendar.date(byAdding: .hour, value: 8, to: bedTime) {
+            wakeTime = tmp
+        }
+    }
     
 }
 
